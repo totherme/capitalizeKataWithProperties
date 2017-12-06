@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 import Test.Hspec
 import Capitalize (capitalize, wordsAndSpaces, unwordsAndSpaces)
 import Test.QuickCheck (property)
@@ -27,14 +29,12 @@ main = hspec $ do
               `shouldBe`
               (unwords . take n $ repeat "Fish")
   describe "wordsAndSpaces" $ do
-    context "when there's one space between each word" $ do
-      it "works like `words`" $
-        pendingWith "did I mis-understand what I wanted here?"
-        -- property $
-        -- \n -> let wordList = take n $ repeat "herring" in
-        --   (wordsAndSpaces (unwords wordList))
-        --   `shouldBe`
-        --   map (\s -> (s, " ")) wordList
+    context "when there's one space between each word and at least one word" $ do
+      it "works like `words`" $ property $
+        \(xs :: [()]) ->  let wordList = take (length xs + 1) $ repeat "herring" in
+          (wordsAndSpaces (unwords wordList ++ " "))
+          `shouldBe`
+          map (\s -> (s, " ")) wordList
   describe "unwordsAndSpaces" $ do
     context "when there's one space between each word" $ do
       it "works like `unwords`" $
@@ -47,7 +47,6 @@ main = hspec $ do
   describe "unwordsAndspaces . wordsAndspaces" $ do
     it "behaves like `id`" $ property $
       \string -> (unwordsAndSpaces . wordsAndSpaces $ string) `shouldBe` string
-
 
 tailIsh :: [a] -> [a]
 tailIsh [] = []
