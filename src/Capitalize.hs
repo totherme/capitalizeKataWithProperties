@@ -5,4 +5,5 @@ module Capitalize
 import Data.Char (toUpper)
 
 capitalize :: String -> String
-capitalize = map toUpper
+capitalize "" = ""
+capitalize (x:xs) = (toUpper x) : xs
