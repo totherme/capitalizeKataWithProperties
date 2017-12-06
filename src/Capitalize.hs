@@ -5,4 +5,4 @@ module Capitalize
 import Data.Char (toUpper)
 
 capitalize :: String -> String
-capitalize = id
+capitalize = map toUpper
