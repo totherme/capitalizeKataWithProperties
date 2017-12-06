@@ -36,14 +36,13 @@ main = hspec $ do
           `shouldBe`
           map (\s -> (s, " ")) wordList
   describe "unwordsAndSpaces" $ do
-    context "when there's one space between each word" $ do
+    context "when there's one space between each word and at least one word" $ do
       it "works like `unwords`" $
-        pendingWith "did I mis-understand what I wanted here?"
-        -- property $
-        -- \n -> let wordAndSpaceList = take n $ repeat ("eels", " ") in
-        --   (unwordsAndSpaces wordAndSpaceList)
-        --   `shouldBe`
-        --   (unwords $ map fst wordAndSpaceList)
+        property $
+        \(xs :: [()]) -> let wordAndSpaceList = take (length xs + 1) $ repeat ("eels", " ") in
+          (unwordsAndSpaces wordAndSpaceList)
+          `shouldBe`
+          ((++" ") . unwords $ map fst wordAndSpaceList)
   describe "unwordsAndspaces . wordsAndspaces" $ do
     it "behaves like `id`" $ property $
       \string -> (unwordsAndSpaces . wordsAndSpaces $ string) `shouldBe` string
