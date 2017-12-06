@@ -1,6 +1,7 @@
 module Capitalize
-    ( capitalize,
-      wordsAndSpaces
+    ( capitalize
+    , wordsAndSpaces
+    , unwordsAndSpaces
     ) where
 
 import Data.Char (toUpper)
@@ -16,3 +17,6 @@ type WordAndSpaces = (String, String)
 
 wordsAndSpaces :: String -> [WordAndSpaces]
 wordsAndSpaces = map (\s -> (s, " ")) . words
+
+unwordsAndSpaces :: [WordAndSpaces] -> String
+unwordsAndSpaces = unwords . map fst

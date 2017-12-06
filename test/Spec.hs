@@ -1,5 +1,5 @@
 import Test.Hspec
-import Capitalize (capitalize, wordsAndSpaces)
+import Capitalize (capitalize, wordsAndSpaces, unwordsAndSpaces)
 import Test.QuickCheck (property)
 import Data.Maybe (fromMaybe, listToMaybe)
 import Data.Char (isAlpha)
@@ -37,8 +37,11 @@ main = hspec $ do
           map (\s -> (s, " ")) wordList
   describe "unwordsAndSpaces" $ do
     context "when there's one space between each word" $ do
-      it "works like `unwords`" $
-        pendingWith "let's make wordsAndSpaces kinda-work first"
+      it "works like `unwords`" $ property $
+        \n -> let wordAndSpaceList = take n $ repeat ("eels", " ") in
+          (unwordsAndSpaces wordAndSpaceList)
+          `shouldBe`
+          (unwords $ map fst wordAndSpaceList)
   describe "unwordsAndspaces . wordsAndspaces" $ do
     it "behaves like `id`" $
       pendingWith "let's make wordsAndspaces and unwordsAndspaces kinda work first"
