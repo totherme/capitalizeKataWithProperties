@@ -5,5 +5,8 @@ module Capitalize
 import Data.Char (toUpper)
 
 capitalize :: String -> String
-capitalize "" = ""
-capitalize (x:xs) = (toUpper x) : xs
+capitalize = unwords . map capitalizeWord . words
+
+capitalizeWord :: String -> String
+capitalizeWord "" = ""
+capitalizeWord (x:xs) = (toUpper x) : xs
