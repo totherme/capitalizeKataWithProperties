@@ -16,4 +16,12 @@ main = hspec $ do
     it "preserves non-alphabetic characters" $ property $
       \string -> (filter (not . isAlpha) . capitalize $ string)
                  `shouldBe`
-                 filter (not . isAlpha) string where
+                 filter (not . isAlpha) string
+    context "when there's only one word in the string" $ do
+      it "preserves all but the first character" $ property $
+        \string -> let oneWord = filter isAlpha string in
+          (tailIsh $ capitalize oneWord) `shouldBe` (tailIsh oneWord)
+
+tailIsh :: [a] -> [a]
+tailIsh [] = []
+tailIsh (_:xs) = xs
