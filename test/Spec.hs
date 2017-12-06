@@ -8,17 +8,15 @@ main :: IO ()
 main = hspec $ do
   describe "Capitalize" $ do
     it "preserves length" $ property $
-      pendingWith "need better words and unwords functions"
-      -- \ string -> length ( capitalize string) `shouldBe` length string
+      \string -> length ( capitalize string) `shouldBe` length string
     it "never returns a string that starts lower-case" $ property $
       \ string -> not $ (fromMaybe ' '  . listToMaybe . capitalize $ string )
                   `elem`
                   ['a'..'z']
     it "preserves non-alphabetic characters" $ property $
-      pendingWith "need better words and unwords functions"
-      -- \string -> (filter (not . isAlpha) . capitalize $ string)
-      --            `shouldBe`
-      --            filter (not . isAlpha) string
+      \string -> (filter (not . isAlpha) . capitalize $ string)
+                 `shouldBe`
+                 filter (not . isAlpha) string
     context "when there's only one word in the string" $ do
       it "preserves all but the first character" $ property $
         \string -> let oneWord = filter isAlpha string in
@@ -30,21 +28,25 @@ main = hspec $ do
               (unwords . take n $ repeat "Fish")
   describe "wordsAndSpaces" $ do
     context "when there's one space between each word" $ do
-      it "works like `words`" $ property $
-        \n -> let wordList = take n $ repeat "herring" in
-          (wordsAndSpaces (unwords wordList))
-          `shouldBe`
-          map (\s -> (s, " ")) wordList
+      it "works like `words`" $
+        pendingWith "did I mis-understand what I wanted here?"
+        -- property $
+        -- \n -> let wordList = take n $ repeat "herring" in
+        --   (wordsAndSpaces (unwords wordList))
+        --   `shouldBe`
+        --   map (\s -> (s, " ")) wordList
   describe "unwordsAndSpaces" $ do
     context "when there's one space between each word" $ do
-      it "works like `unwords`" $ property $
-        \n -> let wordAndSpaceList = take n $ repeat ("eels", " ") in
-          (unwordsAndSpaces wordAndSpaceList)
-          `shouldBe`
-          (unwords $ map fst wordAndSpaceList)
+      it "works like `unwords`" $
+        pendingWith "did I mis-understand what I wanted here?"
+        -- property $
+        -- \n -> let wordAndSpaceList = take n $ repeat ("eels", " ") in
+        --   (unwordsAndSpaces wordAndSpaceList)
+        --   `shouldBe`
+        --   (unwords $ map fst wordAndSpaceList)
   describe "unwordsAndspaces . wordsAndspaces" $ do
-    it "behaves like `id`" $
-      pendingWith "let's make wordsAndspaces and unwordsAndspaces kinda work first"
+    it "behaves like `id`" $ property $
+      \string -> (unwordsAndSpaces . wordsAndSpaces $ string) `shouldBe` string
 
 
 tailIsh :: [a] -> [a]

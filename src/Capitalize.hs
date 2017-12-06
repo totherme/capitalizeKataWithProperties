@@ -4,10 +4,11 @@ module Capitalize
     , unwordsAndSpaces
     ) where
 
-import Data.Char (toUpper)
+import Data.Char (toUpper, isAlpha)
 
 capitalize :: String -> String
-capitalize = unwords . map capitalizeWord . words
+capitalize = unwordsAndSpaces . map f . wordsAndSpaces where
+  f (word, spaces) = (capitalizeWord word, spaces)
 
 capitalizeWord :: String -> String
 capitalizeWord "" = ""
@@ -16,7 +17,14 @@ capitalizeWord (x:xs) = (toUpper x) : xs
 type WordAndSpaces = (String, String)
 
 wordsAndSpaces :: String -> [WordAndSpaces]
-wordsAndSpaces = map (\s -> (s, " ")) . words
+wordsAndSpaces "" = []
+wordsAndSpaces s = (firstWord, firstSpaces) : (wordsAndSpaces rest) where
+  firstWord = takeWhile isAlpha s
+  firstSpaces = takeWhile (not . isAlpha) $ dropWhile isAlpha s
+  rest = dropWhile (not . isAlpha) $ dropWhile isAlpha s
 
 unwordsAndSpaces :: [WordAndSpaces] -> String
-unwordsAndSpaces = unwords . map fst
+unwordsAndSpaces [] = ""
+unwordsAndSpaces ((word, spaces):rest) = word ++
+                                         spaces ++
+                                         (unwordsAndSpaces rest)
