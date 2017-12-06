@@ -1,5 +1,5 @@
 import Test.Hspec
-import Capitalize (capitalize)
+import Capitalize (capitalize, wordsAndSpaces)
 import Test.QuickCheck (property)
 import Data.Maybe (fromMaybe, listToMaybe)
 import Data.Char (isAlpha)
@@ -28,6 +28,21 @@ main = hspec $ do
         \n -> (capitalize (unwords . take n $ repeat "fish"))
               `shouldBe`
               (unwords . take n $ repeat "Fish")
+  describe "wordsAndSpaces" $ do
+    context "when there's one space between each word" $ do
+      it "works like `words`" $ property $
+        \n -> let wordList = take n $ repeat "herring" in
+          (wordsAndSpaces (unwords wordList))
+          `shouldBe`
+          map (\s -> (s, " ")) wordList
+  describe "unwordsAndSpaces" $ do
+    context "when there's one space between each word" $ do
+      it "works like `unwords`" $
+        pendingWith "let's make wordsAndSpaces kinda-work first"
+  describe "unwordsAndspaces . wordsAndspaces" $ do
+    it "behaves like `id`" $
+      pendingWith "let's make wordsAndspaces and unwordsAndspaces kinda work first"
+
 
 tailIsh :: [a] -> [a]
 tailIsh [] = []
